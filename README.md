@@ -5,9 +5,9 @@ Formula One data analysis comparator of the races in the season 2025 and 2026. A
 ## Setup
 Download the necessary dependencies.
 ```
-pip install dash dash-bootstrap-components fastf1 plotly pandas
+pip install dash dash-bootstrap-components dash-mantine-components fastf1 plotly pandas
 ```
 Run the program.
 ```commandline
-python app.py
+python src/app.py
 ```
