@@ -1,0 +1,36 @@
+# virtual environment
+.venv/
+venv/
+
+# FastF1 cache
+cache/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# environment variables
+.env
+.env.local
+
+# PyCharm
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dash
+.dash_cache/
+
+# pytest
+.pytest_cache/
+
+# distribution
+dist/
+build/
+*.egg-info/
