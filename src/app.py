@@ -1,7 +1,4 @@
-import dash_bootstrap_components as dbc
-from dash import Dash, html, dcc
-import plotly.express as px
-import pandas as pd
+from dash import Dash, html
 
 from components import navbar, footer, session_selector, driver_selector, GP_selector
 

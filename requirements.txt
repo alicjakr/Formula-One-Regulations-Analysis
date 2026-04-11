@@ -5,3 +5,4 @@ dash-mantine-components
 dropbox-cli
 dash-bootstrap-components
 fastf1
+numpy
