@@ -8,6 +8,6 @@ Download the necessary dependencies.
 pip install dash dash-bootstrap-components dash-mantine-components fastf1 plotly pandas
 ```
 Run the program.
-```commandline
+```
 python src/app.py
 ```
