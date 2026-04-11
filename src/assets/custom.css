@@ -12,6 +12,16 @@
     color: #9290C3;
 }
 
+.app-navbar {
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    background-color: #070F2B;
+    border: 1px solid #535C91;
+    border-radius: 5px;
+    color: #9290C3;
+}
+
 .button {
     text-align: center;
     outline: True;

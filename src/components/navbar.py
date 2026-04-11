@@ -1,19 +1,12 @@
 import dash_bootstrap_components as dbc
+from dash import html
 
-navbar_style = {
-    'display': 'flex',
-    'justifyContent': 'center',
-    'alignItems': 'center',
-    'backgroundColor': '#070F2B',
-    'border': '#535C91',
-    'borderRadius': '5px',
-    'padding': '10px',
-    'color': '#9290C3',
-}
 
 def get_navbar():
     navbar = dbc.Navbar(
-        children=[],
-        style=navbar_style,
+        html.Div(
+            html.H1('Formula One data telemetry comparison for seasons 2025 and 2026')
+        ),
+        className = 'app-navbar'
     )
     return navbar
