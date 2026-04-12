@@ -1,4 +1,3 @@
-import dbc
 from dash import Dash, html, callback, Output, Input
 from components import navbar, footer, session_selector, driver_selector, GP_selector, telemetry_chart, track_map, chart_selector
 from data import loader, telemetry
@@ -42,12 +41,7 @@ app.layout = html.Div(
     Input('gp-selector', 'value'),
     Input('session-type', 'value'),
 )
-@callback(
-    Output('graph-type', 'circuit'),
-    Input('gp-selector', 'value'),
-    Input('driver-selector', 'value'),
-    Input('session-type', 'value'),
-)
+
 def update_drivers(gp, session_type):
     print(f"update")
     if not gp or not session_type:

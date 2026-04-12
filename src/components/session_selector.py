@@ -3,7 +3,7 @@ from dash import dcc
 
 
 def get_display_mode():
-    display_mode = dbc.Row([
+    return dbc.Row([
         dbc.Col([
             dbc.Label('Display mode'),
             dcc.RadioItems(
@@ -17,11 +17,10 @@ def get_display_mode():
         ], style={'width': '50%', 'display': 'inline-block', 'color': 'white'}),
         dbc.Col([])
     ])
-    return display_mode
 
 
 def get_display_type():
-    display_type = dbc.Row([
+    return dbc.Row([
         dbc.Col([
             dbc.Label('Display type'),
             dcc.RadioItems(
@@ -35,11 +34,10 @@ def get_display_type():
         ], style={'width': '50%', 'display': 'inline-block', 'color': 'white'}),
         dbc.Col([])
     ])
-    return display_type
 
 
 def get_session_type():
-    session_type = dbc.Row([
+    return dbc.Row([
         dbc.Col([
             dbc.Label('Session type'),
             dcc.RadioItems(
@@ -53,4 +51,3 @@ def get_session_type():
         ], style={'width': '50%', 'display': 'inline-block', 'color': 'white'}),
         dbc.Col([])
     ])
-    return session_type

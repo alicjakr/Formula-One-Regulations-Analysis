@@ -2,10 +2,10 @@ from dash import dcc
 
 
 def get_driver_selector():
-    driver_sel = dcc.Dropdown(
+    return dcc.Dropdown(
         id='driver-selector',
         options=[],
         placeholder='Select a driver',
         maxHeight=300,
+        className='dropdown',
     )
-    return driver_sel

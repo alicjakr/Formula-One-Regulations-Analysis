@@ -24,5 +24,12 @@
 .button {
     text-align: center;
     outline: True;
+    border: 1px solid #535C91;
     border-radius: 5px;
+}
+
+.dropdown {
+    color: black;
+    background-color: white;
+    broder-radius: 10px;
 }
