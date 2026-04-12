@@ -1,6 +1,6 @@
 import dbc
 from dash import Dash, html, callback, Output, Input
-from components import navbar, footer, session_selector, driver_selector, GP_selector, telemetry_chart, track_map
+from components import navbar, footer, session_selector, driver_selector, GP_selector, telemetry_chart, track_map, chart_selector
 from data import loader, telemetry
 import dash_bootstrap_components as dbc
 
@@ -56,25 +56,26 @@ def update_drivers(gp, session_type):
     return [{'label': driver, 'value': driver} for driver in drivers]
 
 
-@callback(
-    Output('main-graph', 'figure'),
-    Input('gp-selector', 'value'),
-    Input('driver-selector', 'value'),
-    Input('session-type', 'value'),
-    Input('display-mode', 'value'),
-    Input('display-type', 'value'),
-)
-def update_graph(gp, driver, session_type, display_mode, display_type):
-    if not gp or not driver or not session_type:
-        return {}
-
-    session = loader.load_session(gp, session_type)
-    data = telemetry.get_lap_telemetry(driver, session)
-
-    if display_type == 'circuit':
-        return track_map.plot_circuit(data, channel)
-    else:
-        return telemetry_chart.plot_graph(data, channel)
+# @callback(
+#     Output('main-graph', 'figure'),
+#     Input('gp-selector', 'value'),
+#     Input('driver-selector', 'value'),
+#     Input('session-type', 'value'),
+#     Input('display-mode', 'value'),
+#     Input('display-type', 'value'),
+#     Input('chart-type', 'value'),
+# )
+# def update_graph(gp, driver, session_type, display_mode, display_type, chart_type):
+#     if not gp or not driver or not session_type:
+#         return {}
+#
+#     session = loader.load_session(gp, session_type)
+#     data = telemetry.get_lap_telemetry(driver, session)
+#
+#     if display_type == 'circuit':
+#         return track_map.plot_circuit(data, chart_type)
+#     else:
+#         return telemetry_chart.plot_graph(data, chart_type)
 
 
 if __name__ == '__main__':

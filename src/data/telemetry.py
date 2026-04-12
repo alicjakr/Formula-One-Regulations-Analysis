@@ -1,6 +1,6 @@
 import numpy as np
 
-import loader
+from . import loader
 
 def get_telemetry(year: int, gp: str, session_type: str, driver: str):
     session = loader.load_session(year, gp, session_type)
@@ -18,4 +18,4 @@ def get_telemetry(year: int, gp: str, session_type: str, driver: str):
         'laps': lap,
     }
 
-def get_lap_telemetry(driver: str, session: str):
+# def get_lap_telemetry(driver: str, session: str):
