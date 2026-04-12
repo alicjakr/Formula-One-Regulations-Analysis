@@ -1,4 +1,4 @@
-# F1 data analysis and visualization
+# F1 data analysis and visualisation
 
 Formula One data analysis comparator of the races in the season 2025 and 2026. Allows for analysis of differences in car and driver's behaviour regarding the new regarding the new regulations.
 
