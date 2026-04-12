@@ -1,10 +1,11 @@
 from dash import dcc
 
+
 def get_gp_selector(gps: list):
     gp_sel = dcc.Dropdown(
-        id = 'gp-selector',
-        options = [{'label': gp, 'value': gp} for gp in gps],
-        placeholder = 'Select a GP',
+        id='gp-selector',
+        options=[{'label': gp, 'value': gp} for gp in gps],
+        placeholder='Select a GP',
         maxHeight=300,
     )
     return gp_sel

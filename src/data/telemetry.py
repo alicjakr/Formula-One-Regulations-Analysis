@@ -17,3 +17,5 @@ def get_telemetry(year: int, gp: str, session_type: str, driver: str):
         'telemetry': tel,
         'laps': lap,
     }
+
+def get_lap_telemetry(driver: str, session: str):
