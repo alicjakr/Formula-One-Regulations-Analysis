@@ -23,9 +23,22 @@
 
 .button {
     text-align: center;
-    outline: True;
     border: 1px solid #535C91;
     border-radius: 5px;
+}
+
+.button:hover {
+    text-align: center;
+    border: 1px solid #535C91;
+    border-radius: 5px;
+    background-color: #646C9C;
+}
+
+.button:active {
+    text-align: center;
+    border: 1px solid #535C91;
+    border-radius: 5px;
+    background-color: #646C9C;
 }
 
 .dropdown {
