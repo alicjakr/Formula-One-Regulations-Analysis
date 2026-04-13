@@ -1,7 +1,15 @@
-from dash import Dash, html, callback, Output, Input
+from dash import Dash, html, callback, Output, Input, ctx
 from components import navbar, footer, session_selector, driver_selector, GP_selector, telemetry_chart, track_map, chart_selector
 from data import loader, telemetry
 import dash_bootstrap_components as dbc
+
+BUTTON_CHANNEL_MAP = {
+    'btn-speed': 'Speed',
+    'btn-rpm': 'RPM',
+    'btn-gear-shifts': 'nGear',
+    'btn-throttle': 'Throttle',
+    'btn-brake': 'Brake',
+}
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 
@@ -41,7 +49,6 @@ app.layout = html.Div(
     Input('gp-selector', 'value'),
     Input('session-type', 'value'),
 )
-
 def update_drivers(gp, session_type):
     print(f"update")
     if not gp or not session_type:
@@ -49,27 +56,54 @@ def update_drivers(gp, session_type):
     drivers = loader.get_common_drivers(gp, session_type)
     return [{'label': driver, 'value': driver} for driver in drivers]
 
+@callback(
+    Output('btn-speed', 'className'),
+    Output('btn-rpm', 'className'),
+    Output('btn-gear-shifts', 'className'),
+    Output('btn-throttle', 'className'),
+    Output('btn-brake', 'className'),
+    Input('btn-speed', 'n_clicks'),
+    Input('btn-rpm', 'n_clicks'),
+    Input('btn-gear-shifts', 'n_clicks'),
+    Input('btn-throttle', 'n_clicks'),
+    Input('btn-brake', 'n_clicks'),
+    prevent_initial_call=True,
+)
+def update_chart(b1, b2, b3, b4, b5):
+    active = 'btn-active'
+    inactive = 'btn'
+    triggered = ctx.triggered_id
+    return [
+        active if triggered == btn_id else inactive for btn_id in BUTTON_CHANNEL_MAP.keys()
+    ]
 
-# @callback(
-#     Output('main-graph', 'figure'),
-#     Input('gp-selector', 'value'),
-#     Input('driver-selector', 'value'),
-#     Input('session-type', 'value'),
-#     Input('display-mode', 'value'),
-#     Input('display-type', 'value'),
-#     Input('chart-type', 'value'),
-# )
-# def update_graph(gp, driver, session_type, display_mode, display_type, chart_type):
-#     if not gp or not driver or not session_type:
-#         return {}
-#
-#     session = loader.load_session(gp, session_type)
-#     data = telemetry.get_lap_telemetry(driver, session)
-#
-#     if display_type == 'circuit':
-#         return track_map.plot_circuit(data, chart_type)
-#     else:
-#         return telemetry_chart.plot_graph(data, chart_type)
+@callback(
+    Output('main-graph', 'figure'),
+    Input('btn-speed', 'n_clicks'),
+    Input('btn-rpm', 'n_clicks'),
+    Input('btn-gear-shifts', 'n_clicks'),
+    Input('btn-throttle', 'n_clicks'),
+    Input('btn-brake', 'n_clicks'),
+    Input('gp-selector', 'value'),
+    Input('driver-selector', 'value'),
+    Input('session-type', 'value'),
+    Input('display-type', 'value'),
+    prevent_initial_call=True,
+)
+def update_graph(gp, driver, session_type, display_type, chart_type):
+    if not gp or not driver or not session_type:
+        return {}
+
+    triggered = ctx.triggered_id
+
+    channel = BUTTON_CHANNEL_MAP[triggered]
+    session = loader.load_session(gp, session_type)
+    data = telemetry.get_lap_telemetry(driver, session)
+
+    if display_type == 'circuit':
+        return track_map.plot_circuit(data, chart_type)
+    else:
+        return telemetry_chart.plot_graph(data, chart_type)
 
 
 if __name__ == '__main__':
