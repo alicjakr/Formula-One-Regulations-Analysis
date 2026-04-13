@@ -1,4 +1,6 @@
-from dash import Dash, html, callback, Output, Input, ctx
+from dash import Dash, html, callback, Output, Input, ctx, dcc
+from dash.exceptions import PreventUpdate
+
 from components import navbar, footer, session_selector, driver_selector, GP_selector, telemetry_chart, track_map, chart_selector
 from data import loader, telemetry
 import dash_bootstrap_components as dbc
@@ -28,13 +30,15 @@ app.layout = html.Div(
                     html.Br(),
                     chart_selector.get_chart_type(),
                 ], width=2),
-                dbc.Col([
-                    #graph
-                ], width=8),
+                dbc.Col(
+                    dcc.Graph(id='main-graph'),
+                width=8),
                 dbc.Col([
                     session_selector.get_display_type(),
                     html.Br(),
                     html.Div(session_selector.get_display_mode(), id='display-mode-cont', style={'display': 'none'}),
+                    html.Br(),
+                    html.Div(session_selector.get_year(), id='year-cont', style={'display': 'none'}),
                 ], width=2),
             ], justify='between'),
         ], style={'flex': '1', 'padding': '10px'}),
@@ -78,6 +82,20 @@ def update_chart(b1, b2, b3, b4, b5):
     ]
 
 @callback(
+    Output('year-cont', 'style'),
+    Input('display-mode', 'value'),
+    Input('display-type', 'value'),
+)
+def update_year(display_mode, display_type):
+    if display_type == 'circuit':
+        return {'display': 'none'}
+    else:
+        if display_mode == 'together':
+            return {'display': 'none'}
+        else:
+            return {'display': 'block'}
+
+@callback(
     Output('display-mode-cont', 'style'),
     Input('display-type', 'value'),
 )
@@ -87,33 +105,37 @@ def update_display_mode(display_type):
     else:
         return {'display': 'block'}
 
-# @callback(
-#     Output('main-graph', 'figure'),
-#     Input('btn-speed', 'n_clicks'),
-#     Input('btn-rpm', 'n_clicks'),
-#     Input('btn-gear-shifts', 'n_clicks'),
-#     Input('btn-throttle', 'n_clicks'),
-#     Input('btn-brake', 'n_clicks'),
-#     Input('gp-selector', 'value'),
-#     Input('driver-selector', 'value'),
-#     Input('session-type', 'value'),
-#     Input('display-type', 'value'),
-#     prevent_initial_call=True,
-# )
-# def update_graph(gp, driver, session_type, display_type, chart_type):
-#     if not gp or not driver or not session_type:
-#         return {}
-#
-#     triggered = ctx.triggered_id
-#
-#     channel = BUTTON_CHANNEL_MAP[triggered]
-#     session = loader.load_session(gp, session_type)
-#     data = telemetry.get_lap_telemetry(driver, session)
-#
-#     if display_type == 'circuit':
-#         return track_map.plot_circuit(data, chart_type)
-#     else:
-#         return telemetry_chart.plot_graph(data, chart_type)
+@callback(
+    Output('main-graph', 'figure'),
+    Input('btn-speed', 'n_clicks'),
+    Input('btn-rpm', 'n_clicks'),
+    Input('btn-gear-shifts', 'n_clicks'),
+    Input('btn-throttle', 'n_clicks'),
+    Input('btn-brake', 'n_clicks'),
+    Input('gp-selector', 'value'),
+    Input('driver-selector', 'value'),
+    Input('session-type', 'value'),
+    Input('display-type', 'value'),
+    Input('chart-type', 'value'),
+    Input('year', 'value'),
+    prevent_initial_call=True,
+)
+def update_graph(b1, b2, b3, b4, b5, gp, driver, session_type, display_type, chart_type, year):
+    if not gp or not driver or not session_type:
+        return {}
+
+    triggered = ctx.triggered_id
+    if triggered not in BUTTON_CHANNEL_MAP:
+        raise PreventUpdate()
+
+    channel = BUTTON_CHANNEL_MAP[triggered]
+    session = loader.load_session(int(year), gp, session_type)
+    data = telemetry.get_lap_telemetry(driver, session)
+
+    if display_type == 'circuit':
+        return track_map.plot_circuit(data, chart_type)
+    # else:
+    #     return telemetry_chart.plot_graph(data, chart_type)
 
 
 if __name__ == '__main__':

@@ -9,10 +9,10 @@ def get_display_mode():
             dcc.RadioItems(
                 id='display-mode',
                 options=[
-                    {'label': 'separate', 'value': 'separate'},
                     {'label': 'together', 'value': 'together'},
+                    {'label': 'separate', 'value': 'separate'},
                 ],
-                value='separate', className='radio-white',
+                value='together', className='radio-white',
             ),
         ], style={'width': '50%', 'display': 'inline-block', 'color': 'white'}),
         dbc.Col([])
@@ -47,6 +47,22 @@ def get_session_type():
                     {'label': 'race', 'value': 'race'},
                 ],
                 value='qualifying', className='radio-white',
+            ),
+        ], style={'width': '50%', 'display': 'inline-block', 'color': 'white'}),
+        dbc.Col([])
+    ])
+
+def get_year():
+    return dbc.Row([
+        dbc.Col([
+            dbc.Label('Year'),
+            dcc.RadioItems(
+                id='year',
+                options=[
+                    {'label': '2025', 'value': '2025'},
+                    {'label': '2026', 'value': '2026'},
+                ],
+                value='2025', className='radio-white',
             ),
         ], style={'width': '50%', 'display': 'inline-block', 'color': 'white'}),
         dbc.Col([])
