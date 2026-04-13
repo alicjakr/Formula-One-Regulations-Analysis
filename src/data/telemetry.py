@@ -2,11 +2,12 @@ import numpy as np
 
 from . import loader
 
-def get_telemetry(year: int, gp: str, session_type: str, driver: str):
-    session = loader.load_session(year, gp, session_type)
+def get_telemetry(session, driver: str):
     lap = session.laps.pick_driver(driver).pick_fastest()
-    tel = lap.get_telemetry()
+    return lap.get_telemetry()
 
+def get_lap_telemetry(session, driver: str):
+    tel = get_telemetry(session, driver)
     x = np.array(tel['X'].values)
     y = np.array(tel['Y'].values)
     points = np.array([x, y]).T.reshape(-1, 1, 2)
@@ -15,7 +16,6 @@ def get_telemetry(year: int, gp: str, session_type: str, driver: str):
     return {
         'segments': segments,
         'telemetry': tel,
-        'laps': lap,
+        'laps': session.laps.pick_driver(driver).pick_fastest(),
     }
 
-# def get_lap_telemetry(driver: str, session: str):
