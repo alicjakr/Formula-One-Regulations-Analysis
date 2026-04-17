@@ -38,7 +38,7 @@ def get_common_drivers(gp: str, session_type: str):
 
 
 @lru_cache(maxsize=20)
-def load_session(year: int, gp: str, session_type:str):
+def load_session(year: int, gp: str, session_type: str):
     session = fastf1.get_session(year, gp, session_type)
     session.load(weather=False, messages=False)
     return session

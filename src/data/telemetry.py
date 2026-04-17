@@ -1,10 +1,8 @@
 import numpy as np
 
-from . import loader
-
 def get_telemetry(session, driver: str):
-    lap = session.laps.pick_driver(driver).pick_fastest()
-    return lap.get_telemetry()
+    lap = session.laps.pick_drivers(driver).pick_fastest()
+    return lap.get_telemetry(frequency=50)
 
 def get_lap_telemetry(session, driver: str):
     tel = get_telemetry(session, driver)
@@ -16,6 +14,5 @@ def get_lap_telemetry(session, driver: str):
     return {
         'segments': segments,
         'telemetry': tel,
-        'laps': session.laps.pick_driver(driver).pick_fastest(),
+        'lap': session.laps.pick_drivers(driver).pick_fastest(),
     }
-

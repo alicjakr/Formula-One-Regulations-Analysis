@@ -1,7 +1,10 @@
 import plotly.graph_objects as go
+from matplotlib import pyplot as plt
+import matplotlib.colors as mcolors
+
 
 CHANNEL_CONFIG = {
-    'Speed': {'column': 'Speed', 'colorscale': 'plasma', 'range': [0, 350], 'label': 'Speed'},
+    'Speed': {'column': 'Speed', 'colorscale': 'plasma', 'range': [0, 360], 'label': 'Speed'},
     'RPM': {'column': 'RPM', 'colorscale': 'RdYlGn', 'range': [0, 14000], 'label': 'RPM'},
     'nGear': {'column': 'nGear', 'colorscale': 'viridis', 'range': [1, 8], 'label': 'Gear'},
     'Throttle': {'column': 'Throttle', 'colorscale': 'cividis', 'range': [0, 100], 'label': 'Throttle'},
@@ -11,46 +14,38 @@ CHANNEL_CONFIG = {
 
 def plot_circuit(data: dict, channel: str):
     config = CHANNEL_CONFIG[channel]
-    segments = data['segments']
     tel = data['telemetry']
     lap = data['lap']
-    values = data['telemetry'][channel].to_numpy().astype(float)
-
-    x = tel['X'].to_numpy()
-    y = tel['Y'].to_numpy()
 
     fig = go.Figure()
 
-    for i in range(len(segments)):
-        fig.add_trace(go.Scatter(
-            x=[segments[i][0][0], segments[i][1][0]],
-            y=[segments[i][0][1], segments[i][1][1]],
-            mode='lines',
-            line=dict(
-                color=values[i],
-                colorscale=config['colorscale'],
-                width=4,
-                cmin=config['range'][0],
-                cmax=config['range'][1],
-            ),
-            showlegend=False,
-            hoverinfo='skip',
-        ))
+    tel = tel.dropna(subset=['X', 'Y', config['column']])
+    tel['X'] = tel['X'].interpolate()
+    tel['Y'] = tel['Y'].interpolate()
+    fig.add_trace(go.Scattergl(
+        x=tel['X'],
+        y=tel['Y'],
+        mode='markers',
+        marker=dict(
+            size=4,
+            color=tel[config['column']],
+            colorscale=config['colorscale'],
+            cmin=config['range'][0],
+            cmax=config['range'][1],
+            showscale=True,
+            colorbar=dict(title=config['label'])
+        )
+    ))
+
 
     fig.update_layout(
-        title=f"{lap['Driver']} - {config['label']} {data['event_name']}",
+        title=f"{lap['Driver']} - {config['label']}",
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font_color='white',
         xaxis=dict(visible=False),
-        yaxis=dict(visible=False),
-        margin=dict(l=0, r=0, b=0, t=0),
-        coloraxis=dict(
-            colorscale=config['colorscale'],
-            cmin=config['range'][0],
-            cmax=config['range'][1],
-            colorbar=dict(title=config['label']),
-        ),
+        yaxis=dict(visible=False, scaleanchor='x'),
+        margin=dict(l=0, r=0, b=0, t=0)
     )
 
     return fig
