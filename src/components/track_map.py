@@ -5,7 +5,7 @@ CHANNEL_CONFIG = {
     'RPM': {'column': 'RPM', 'colorscale': 'RdYlGn', 'range': [0, 14000], 'label': 'RPM'},
     'nGear': {'column': 'nGear', 'colorscale': 'viridis', 'range': [1, 8], 'label': 'Gear'},
     'Throttle': {'column': 'Throttle', 'colorscale': 'cividis', 'range': [0, 100], 'label': 'Throttle'},
-    'Brake': {'column': 'Brake', 'colorscale': [[0, '#ff4444'], [1, '#44ff44']], 'range': [0, 1], 'label': 'Brake'},
+    'Brake': {'column': 'Brake', 'colorscale': ['#44ff44', '#ff4444'], 'range': [0, 1], 'label': 'Brake', 'binary': True},
 }
 
 
@@ -19,20 +19,35 @@ def plot_circuit(data: dict, channel: str):
     tel = tel.dropna(subset=['X', 'Y', config['column']])
     tel['X'] = tel['X'].interpolate()
     tel['Y'] = tel['Y'].interpolate()
-    fig.add_trace(go.Scattergl(
-        x=tel['X'],
-        y=tel['Y'],
-        mode='markers',
-        marker=dict(
-            size=4,
-            color=tel[config['column']],
-            colorscale=config['colorscale'],
-            cmin=config['range'][0],
-            cmax=config['range'][1],
-            showscale=True,
-            colorbar=dict(title=config['label'])
-        )
-    ))
+
+    if config.get('binary'):
+        for value, colour, label in zip([0, 1], config['colorscale'], ['Not braking', 'Braking']):
+            mask = tel[config['column']] == value
+            fig.add_trace(go.Scattergl(
+                x=tel['X'][mask],
+                y=tel['Y'][mask],
+                mode='markers',
+                name=label,
+                marker=dict(
+                    size=4,
+                    color=colour,
+                )
+            ))
+    else:
+        fig.add_trace(go.Scattergl(
+            x=tel['X'],
+            y=tel['Y'],
+            mode='markers',
+            marker=dict(
+                size=4,
+                color=tel[config['column']],
+                colorscale=config['colorscale'],
+                cmin=config['range'][0],
+                cmax=config['range'][1],
+                showscale=True,
+                colorbar=dict(title=config['label'])
+            )
+        ))
 
     fig.update_layout(
         title=f"{lap['Driver']} - {config['label']}",
