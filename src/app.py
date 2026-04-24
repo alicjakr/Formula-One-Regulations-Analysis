@@ -116,10 +116,11 @@ def update_display_mode(display_type):
     Input('driver-selector', 'value'),
     Input('session-type', 'value'),
     Input('display-type', 'value'),
+    Input('display-mode', 'value'),
     Input('year', 'value'),
     prevent_initial_call=True,
 )
-def update_graph(b1, b2, b3, b4, b5, gp, driver, session_type, display_type, year):
+def update_graph(b1, b2, b3, b4, b5, gp, driver, session_type, display_type, display_mode, year):
     print(f"triggered: {ctx.triggered_id}")
     print(f"gp: {gp}, driver: {driver}, session_type: {session_type}, display_type: {display_type}, year: {year}")
 
@@ -134,16 +135,30 @@ def update_graph(b1, b2, b3, b4, b5, gp, driver, session_type, display_type, yea
 
     channel = BUTTON_CHANNEL_MAP[triggered]
     print(f"channel: {channel}")
-    session = loader.load_session(int(year), gp, session_type)
+
+    if display_type == 'plot' and display_mode == 'together':
+        sessions = [
+            loader.load_session(2025, gp, session_type),
+            loader.load_session(2026, gp, session_type),
+        ]
+        data = []
+        for session in sessions:
+            data.append(telemetry.get_lap_telemetry(session, driver))
+    else:
+        if not year:
+            raise PreventUpdate()
+        session = loader.load_session(int(year), gp, session_type)
+        data = telemetry.get_lap_telemetry(session, driver)
+
     print(f"channel: {channel}")
-    data = telemetry.get_lap_telemetry(session, driver)
-    print(f"data keys: {data.keys()}")
 
     if display_type == 'circuit':
-        print(f"figure created")
         return track_map.plot_circuit(data, channel)
-    # else:
-    #     return telemetry_chart.plot_graph(data, chart_type)
+    else:
+        if display_mode == 'together':
+            return telemetry_chart.plot_together(data, channel)
+        else:
+            return telemetry_chart.plot_graph(data, channel)
 
 
 if __name__ == '__main__':

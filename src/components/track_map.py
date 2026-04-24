@@ -1,7 +1,4 @@
 import plotly.graph_objects as go
-from matplotlib import pyplot as plt
-import matplotlib.colors as mcolors
-
 
 CHANNEL_CONFIG = {
     'Speed': {'column': 'Speed', 'colorscale': 'plasma', 'range': [0, 360], 'label': 'Speed'},
@@ -36,7 +33,6 @@ def plot_circuit(data: dict, channel: str):
             colorbar=dict(title=config['label'])
         )
     ))
-
 
     fig.update_layout(
         title=f"{lap['Driver']} - {config['label']}",
