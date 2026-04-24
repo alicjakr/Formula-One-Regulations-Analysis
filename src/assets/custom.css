@@ -21,20 +21,27 @@
     background-color: #070F2B !important;
 }
 
-.button {
+.btn {
     text-align: center;
     border: 1px solid #535C91;
     border-radius: 5px;
 }
 
-.button:hover {
+.btn:hover {
     text-align: center;
     border: 1px solid #535C91;
     border-radius: 5px;
     background-color: #646C9C;
 }
 
-.button:active {
+.btn:active {
+    text-align: center;
+    border: 1px solid #535C91;
+    border-radius: 5px;
+    background-color: #646C9C;
+}
+
+.btn:selected {
     text-align: center;
     border: 1px solid #535C91;
     border-radius: 5px;
