@@ -2,8 +2,6 @@
 
 An interactive web dashboard for analysing and comparing Formula 1 telemetry data across the 2025 and 2026 seasons, built with Python, Dash, and FastF1.
 
-![Dashboard Preview](assets/F1.png)
-
 ---
 
 ## Features
