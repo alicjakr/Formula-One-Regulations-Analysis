@@ -61,13 +61,13 @@ def plot_together(data: list, channel: str):
         ))
 
     fig.update_layout(
-        title=f"{lap['Driver']} - {config['label']}",
+        title=dict(text=f"{lap['Driver']} - {config['label']}", font=dict(family="Arial", size=24), x=0.5, xanchor="center", yanchor="top"),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font_color='white',
         xaxis=dict(title='Distance [m]'),
         yaxis=dict(title=config['label'], range=config['range']),
-        margin=dict(l=0, r=0, b=0, t=0)
+        margin=dict(l=0, r=0, b=0, t=50)
     )
 
     return fig

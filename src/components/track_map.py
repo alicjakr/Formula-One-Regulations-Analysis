@@ -1,10 +1,10 @@
 import plotly.graph_objects as go
 
 CHANNEL_CONFIG = {
-    'Speed': {'column': 'Speed', 'colorscale': 'plasma', 'range': [0, 360], 'label': 'Speed'},
+    'Speed': {'column': 'Speed', 'colorscale': 'plasma', 'range': [0, 360], 'label': 'Speed [km/h]'},
     'RPM': {'column': 'RPM', 'colorscale': 'RdYlGn', 'range': [0, 14000], 'label': 'RPM'},
     'nGear': {'column': 'nGear', 'colorscale': 'viridis', 'range': [1, 8], 'label': 'Gear'},
-    'Throttle': {'column': 'Throttle', 'colorscale': 'cividis', 'range': [0, 100], 'label': 'Throttle'},
+    'Throttle': {'column': 'Throttle', 'colorscale': 'cividis', 'range': [0, 100], 'label': 'Throttle [%]'},
     'Brake': {'column': 'Brake', 'colorscale': ['#44ff44', '#ff4444'], 'range': [0, 1], 'label': 'Brake', 'binary': True},
 }
 
@@ -45,18 +45,18 @@ def plot_circuit(data: dict, channel: str):
                 cmin=config['range'][0],
                 cmax=config['range'][1],
                 showscale=True,
-                colorbar=dict(title=config['label'])
+                colorbar=dict(title=config['label'], x=0.86, len=0.9, tickfont=dict(size=10)),
             )
         ))
 
     fig.update_layout(
-        title=f"{lap['Driver']} - {config['label']}",
+        title=dict(text=f"{lap['Driver']} - {config['label']}", font=dict(family="Arial", size=24), x=0.5, xanchor="center", yanchor="top"),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font_color='white',
-        xaxis=dict(visible=False),
+        xaxis=dict(visible=False, domain=[0, 0.85]),
         yaxis=dict(visible=False, scaleanchor='x'),
-        margin=dict(l=0, r=0, b=0, t=0)
+        margin=dict(l=0, r=0, b=0, t=50)
     )
 
     return fig
