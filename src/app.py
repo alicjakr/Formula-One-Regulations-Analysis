@@ -30,9 +30,33 @@ app.layout = html.Div(
                     html.Br(),
                     chart_selector.get_chart_type(),
                 ], width=2),
-                dbc.Col(
-                    dcc.Graph(id='main-graph', style={'display': 'none'}),
-                width=8),
+                dbc.Col([
+                    html.Div([
+                        dcc.Graph(id='main-graph', style={'display': 'none', 'height': '450px'}),
+                        html.Div(
+                            html.Img(id='logo', src='assets/F1.png', style={
+                                'maxWidth': '60%',
+                                'maxHeight': '60%',
+                            }),
+                            id='logo-container',
+                            style={
+                                'position': 'absolute',
+                                'top': '0',
+                                'left': '0',
+                                'width': '100%',
+                                'height': '100%',
+                                'display': 'flex',
+                                'justifyContent': 'center',
+                                'alignItems': 'center',
+                            }
+                        ),
+                        html.Div(id='error-message', style={'display': 'none'})
+                    ], style={
+                        'position': 'relative',
+                        'width': '100%',
+                        'height': '450px',
+                    }),
+                ], width=8),
                 dbc.Col([
                     session_selector.get_display_type(),
                     html.Br(),
@@ -42,6 +66,7 @@ app.layout = html.Div(
                 ], width=2),
                 dcc.Store(id='active-channel', data='Speed'),
                 dcc.Store(id='graph-ready', data=False),
+                dcc.Store(id='error-vis', data=None),
             ], justify='between'),
         ], style={'flex': '1', 'padding': '10px'}),
         footer.get_footer()
@@ -83,6 +108,34 @@ def update_main_graph(graph_ready):
         return {'display': 'block'}
     else:
         return {'display': 'none'}
+
+@callback(
+    Output('logo-container', 'style'),
+    Input('graph-ready', 'data'),
+)
+def update_logo(graph_ready):
+    base = {
+        'position': 'absolute',
+        'top': '0', 'left': '0',
+        'width': '100%', 'height': '100%',
+        'display': 'flex',
+        'justifyContent': 'center',
+        'alignItems': 'center',
+    }
+    if graph_ready:
+        return {**base, 'display': 'none'}
+    return base
+
+@callback(
+    Output('error-message', 'style'),
+    Output('error-message', 'children'),
+    Input('error-vis', 'data'),
+)
+def update_main_graph(error_vis):
+    if error_vis:
+        return {'display': 'block'}, error_vis
+    else:
+        return {'display': 'none'}, ''
 
 @callback(
     Output('btn-speed', 'className'),
@@ -132,6 +185,7 @@ def update_display_mode(display_type):
 @callback(
     Output('main-graph', 'figure'),
     Output('graph-ready', 'data'),
+    Output('error-vis', 'data'),
     Input('active-channel', 'data'),
     Input('gp-selector', 'value'),
     Input('driver-selector', 'value'),
@@ -152,20 +206,25 @@ def update_graph(channel, gp, driver, session_type, display_type, display_mode, 
         ]
         data = []
         for session in sessions:
-            data.append(telemetry.get_lap_telemetry(session, driver))
+            if telemetry.get_lap_telemetry(session, driver):
+                data.append(telemetry.get_lap_telemetry(session, driver))
+            else:
+                return None, False, 'There is no lap telemetry for this session'
     else:
         if not year:
             raise PreventUpdate()
         session = loader.load_session(int(year), gp, session_type)
         data = telemetry.get_lap_telemetry(session, driver)
+        if data is None:
+            return None, False, 'There is no lap telemetry for this session'
 
     if display_type == 'circuit':
-        return track_map.plot_circuit(data, channel), True
+        return track_map.plot_circuit(data, channel), True, None
     else:
         if display_mode == 'together':
-            return telemetry_chart.plot_together(data, channel), True
+            return telemetry_chart.plot_together(data, channel), True, None
         else:
-            return telemetry_chart.plot_graph(data, channel), True
+            return telemetry_chart.plot_graph(data, channel), True, None
 
 
 if __name__ == '__main__':
