@@ -29,23 +29,31 @@
 
 .btn:hover {
     text-align: center;
-    border: 1px solid #535C91;
+    border: 1px solid #535C91 !important;
     border-radius: 5px;
-    background-color: #646C9C;
+    background-color: #646C9C !important;
+    box-shadow: none !important;
 }
 
-.btn:active {
+.btn-active {
     text-align: center;
-    border: 1px solid #535C91;
+    border: 1px solid #535C91 !important;
     border-radius: 5px;
-    background-color: #646C9C;
+    background-color: #646C9C !important;
+    box-shadow: none !important;
 }
 
-.btn:selected {
-    text-align: center;
-    border: 1px solid #535C91;
-    border-radius: 5px;
-    background-color: #646C9C;
+.btn-active:hover {
+    background-color: #646C9C !important;
+    border: 1px solid #535C91 !important;
+}
+
+.btn-active:focus,
+.btn-active:active {
+    background-color: #646C9C !important;
+    border: 1px solid #535C91 !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
 
 .dropdown {
