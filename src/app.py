@@ -31,7 +31,7 @@ app.layout = html.Div(
                     chart_selector.get_chart_type(),
                 ], width=2),
                 dbc.Col(
-                    dcc.Graph(id='main-graph'),
+                    dcc.Graph(id='main-graph', style={'display': 'none'}),
                 width=8),
                 dbc.Col([
                     session_selector.get_display_type(),
@@ -40,7 +40,8 @@ app.layout = html.Div(
                     html.Br(),
                     html.Div(session_selector.get_year(), id='year-cont', style={'display': 'none'}),
                 ], width=2),
-                dcc.Store(id='active-channel', data='Speed')
+                dcc.Store(id='active-channel', data='Speed'),
+                dcc.Store(id='graph-ready', data=False),
             ], justify='between'),
         ], style={'flex': '1', 'padding': '10px'}),
         footer.get_footer()
@@ -72,6 +73,16 @@ def update_drivers(gp, session_type):
 )
 def store_channel(b1, b2, b3, b4, b5):
     return BUTTON_CHANNEL_MAP[ctx.triggered_id]
+
+@callback(
+    Output('main-graph', 'style'),
+    Input('graph-ready', 'data'),
+)
+def update_main_graph(graph_ready):
+    if graph_ready:
+        return {'display': 'block'}
+    else:
+        return {'display': 'none'}
 
 @callback(
     Output('btn-speed', 'className'),
@@ -120,6 +131,7 @@ def update_display_mode(display_type):
 
 @callback(
     Output('main-graph', 'figure'),
+    Output('graph-ready', 'data'),
     Input('active-channel', 'data'),
     Input('gp-selector', 'value'),
     Input('driver-selector', 'value'),
@@ -148,12 +160,12 @@ def update_graph(channel, gp, driver, session_type, display_type, display_mode, 
         data = telemetry.get_lap_telemetry(session, driver)
 
     if display_type == 'circuit':
-        return track_map.plot_circuit(data, channel)
+        return track_map.plot_circuit(data, channel), True
     else:
         if display_mode == 'together':
-            return telemetry_chart.plot_together(data, channel)
+            return telemetry_chart.plot_together(data, channel), True
         else:
-            return telemetry_chart.plot_graph(data, channel)
+            return telemetry_chart.plot_graph(data, channel), True
 
 
 if __name__ == '__main__':
