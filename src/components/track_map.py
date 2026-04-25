@@ -50,7 +50,7 @@ def plot_circuit(data: dict, channel: str):
         ))
 
     fig.update_layout(
-        title=dict(text=f"{lap['Driver']} - {config['label']}", font=dict(family="Arial", size=24), x=0.5, xanchor="center", yanchor="top"),
+        title=dict(text=f"{lap['Driver']} {data['year']} - {config['label']}", font=dict(family="Arial", size=24), x=0.5, xanchor="center", yanchor="top"),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font_color='white',

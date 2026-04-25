@@ -1,3 +1,4 @@
+import datetime
 from functools import lru_cache
 
 import fastf1
@@ -8,6 +9,12 @@ fastf1.Cache.enable_cache(os.path.join(os.path.dirname(__file__), '..', '..', 'c
 def get_common_events():
     season_2025 = fastf1.get_event_schedule(2025)
     season_2026 = fastf1.get_event_schedule(2026)
+
+    now = datetime.datetime.now()
+    season_2026 = season_2026[
+    (season_2026['EventDate'] < now) &
+    (season_2026['EventFormat'] != 'testing')
+    ]
 
     events_2025 = set(season_2025['EventName'].values)
     events_2026 = set(season_2026['EventName'].values)

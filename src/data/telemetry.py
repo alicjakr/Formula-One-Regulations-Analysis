@@ -15,5 +15,6 @@ def get_lap_telemetry(session, driver: str):
         'segments': segments,
         'telemetry': tel,
         'lap': session.laps.pick_drivers(driver).pick_fastest(),
+        'year': str(session.date)[:4],
         'session': session,
     }
