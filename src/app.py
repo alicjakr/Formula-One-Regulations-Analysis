@@ -50,7 +50,17 @@ app.layout = html.Div(
                                 'alignItems': 'center',
                             }
                         ),
-                        html.Div(id='error-message', style={'display': 'none'})
+                        html.Div(id='error-message', style={
+                            'textAlign': 'center',
+                            'width': '100%',
+                            'position': 'absolute',
+                            'top': '50px',
+                            'bottom': '50px',
+                            'zIndex': '10',
+                            'color': '#ff4444',
+                            'fontWeight': 'bold',
+                            'fontSize': '40px',
+                        }),
                     ], style={
                         'position': 'relative',
                         'width': '100%',
@@ -132,10 +142,21 @@ def update_logo(graph_ready):
     Input('error-vis', 'data'),
 )
 def update_main_graph(error_vis):
+    base_style = {
+        'textAlign': 'center',
+        'width': '100%',
+        'position': 'absolute',
+        'top': '50px',
+        'bottom': '50px',
+        'zIndex': '10',
+        'color': '#ff4444',
+        'fontWeight': 'bold',
+        'fontSize': '40px',
+    }
     if error_vis:
-        return {'display': 'block'}, error_vis
+        return {**base_style, 'display': 'block'}, error_vis
     else:
-        return {'display': 'none'}, ''
+        return {**base_style, 'display': 'none'}, ''
 
 @callback(
     Output('btn-speed', 'className'),
