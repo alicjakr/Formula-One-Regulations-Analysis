@@ -78,24 +78,34 @@ python src/app.py
 ```
 Formula_One_analysis/
 ├── src/
-│   ├── app.py                  # Main Dash app and callbacks
+│   ├── assets/
+│   │   ├── custom.css
+│   │   └── F1.png
 │   ├── components/
-│   │   ├── navbar.py
-│   │   ├── footer.py
-│   │   ├── session_selector.py
-│   │   ├── driver_selector.py
-│   │   ├── GP_selector.py
+│   │   ├── __init__.py
 │   │   ├── chart_selector.py
-│   │   ├── telemetry_chart.py  # Standard plot rendering
-│   │   └── track_map.py        # Circuit map rendering
-│   └── data/
-│       ├── loader.py           # Session loading and caching
-│       └── telemetry.py        # Telemetry extraction
-├── assets/
-│   └── F1.png
-├── requirements.txt
-├── LICENSE
-└── README.md
+│   │   ├── driver_selector.py
+│   │   ├── footer.py
+│   │   ├── GP_selector.py
+│   │   ├── navbar.py
+│   │   ├── session_selector.py
+│   │   ├── telemetry_chart.py
+│   │   └── track_map.py
+│   ├── data/
+│   │   ├── __init__.py
+│   │   ├── loader.py
+│   │   └── telemetry.py
+│   ├── pages/
+│   │   ├── __init__.py
+│   │   └── home.py
+│   ├── utils/
+│   │   └── __init__.py
+│   └── app.py
+├── .env
+├── .gitignore
+├── License
+├── README.md
+└── requirements.txt
 ```
 
 ---
