@@ -99,7 +99,6 @@ Formula_One_analysis/
 │   ├── utils/
 │   │   └── __init__.py
 │   └── app.py
-├── .env
 ├── .gitignore
 ├── License
 ├── README.md
