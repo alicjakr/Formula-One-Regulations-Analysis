@@ -35,8 +35,8 @@ An interactive web dashboard for analysing and comparing Formula 1 telemetry dat
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/alicjakr/Formula_One_analysis.git
-cd Formula_One_analysis
+git clone https://github.com/alicjakr/Formula-One-Regulations-Analysis.git
+cd Formula-One-Regulations-Analysis
 ```
 
 2. Create and activate a virtual environment:
@@ -55,6 +55,7 @@ pip install -r requirements.txt
 ```bash
 python src/app.py
 ```
+> **Note:** FastF1 caches session data on first load — the first request for any session may take a minute or two to download.
 
 5. Open your browser at `http://localhost:8050`
 
@@ -74,7 +75,7 @@ python src/app.py
 ## Project Structure
 
 ```
-Formula_One_analysis/
+Formula-One-Regulations-Analysis/
 ├── src/
 │   ├── assets/
 │   │   ├── custom.css
@@ -102,7 +103,9 @@ Formula_One_analysis/
 ├── .gitignore
 ├── License
 ├── README.md
-└── requirements.txt
+├── requirements.txt
+├── .venv/                  # virtual environment (not tracked)
+└── fastf1_cache/           # FastF1 session cache (not tracked)
 ```
 
 ---
